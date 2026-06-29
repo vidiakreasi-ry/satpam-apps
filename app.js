@@ -134,10 +134,13 @@ loginForm.addEventListener('submit', async (e) => {
     
     try {
         // Fetch to Google Apps Script Web App
-        // Menggunakan URLSearchParams agar formatnya x-www-form-urlencoded
+        // Menggunakan body JSON dengan header text/plain untuk bypass CORS preflight (OPTIONS)
         const response = await fetch(GAS_URL, {
             method: 'POST',
-            body: new URLSearchParams({
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify({
                 action: 'login',
                 username: username,
                 pin: pin
@@ -323,13 +326,16 @@ patroliForm?.addEventListener('submit', async (e) => {
     try {
         const response = await fetch(GAS_URL, {
             method: 'POST',
-            body: new URLSearchParams({
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify({
                 action: 'patroli',
                 nama_petugas: namaPetugas,
                 lokasi_qr: lokasiQR,
                 kondisi_lokasi: kondisi,
                 laporan_kondisi: laporan,
-                foto_kondisi: currentFotoBase64
+                foto_kondisi: currentFotoBase64 // Ini yang tadi terlalu besar jika pakai URLSearchParams
             })
         });
         
