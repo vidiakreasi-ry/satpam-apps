@@ -214,6 +214,90 @@
             </div>
         </section>
 
+        <!-- ============================================== -->
+        <!-- HALAMAN: FORM PATROLI (Setelah Scan)           -->
+        <!-- ============================================== -->
+        <section id="page-patroli-form" class="page-section absolute inset-0 flex flex-col transition-all duration-500 transform translate-x-full opacity-0 -z-10 bg-slate-50">
+            <!-- Header -->
+            <div class="bg-primary px-6 py-5 rounded-b-3xl shadow-md flex items-center shrink-0 relative z-10">
+                <button id="btnBackFromPatroliForm" class="p-2 -ml-2 mr-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-white backdrop-blur-md active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <h2 class="text-white text-lg font-semibold tracking-wide">Laporan Kondisi</h2>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-6">
+                <form id="patroliForm" class="space-y-6">
+                    <!-- Lokasi (Readonly) -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1 ml-1">Lokasi Patroli</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-secondary"></i>
+                            </div>
+                            <input type="text" id="patroliLokasi" name="patroliLokasi" readonly
+                                class="block w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-2xl bg-blue-50 text-slate-700 font-semibold text-sm outline-none">
+                        </div>
+                    </div>
+                    
+                    <!-- Kondisi Lokasi -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2 ml-1">Kondisi Lokasi</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative flex items-center justify-center p-3.5 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition-all has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-700 shadow-sm">
+                                <input type="radio" name="kondisiLokasi" value="Aman" checked class="peer sr-only">
+                                <i data-lucide="check-circle" class="w-5 h-5 mr-2 opacity-50 peer-checked:opacity-100 text-emerald-500 transition-opacity"></i>
+                                <span class="font-medium text-sm text-slate-600 peer-checked:text-emerald-700">Aman</span>
+                            </label>
+                            
+                            <label class="relative flex items-center justify-center p-3.5 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition-all has-[:checked]:bg-red-50 has-[:checked]:border-red-500 has-[:checked]:text-red-700 shadow-sm">
+                                <input type="radio" name="kondisiLokasi" value="Ada Temuan" class="peer sr-only">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 opacity-50 peer-checked:opacity-100 text-red-500 transition-opacity"></i>
+                                <span class="font-medium text-sm text-slate-600 peer-checked:text-red-700">Ada Temuan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Laporan Kondisi -->
+                    <div>
+                        <label for="laporanKondisi" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan / Keterangan</label>
+                        <textarea id="laporanKondisi" name="laporanKondisi" rows="3" placeholder="Tuliskan keterangan rinci"
+                            class="block w-full p-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white hover:bg-slate-50 focus:bg-white placeholder-slate-400 text-sm outline-none resize-none"></textarea>
+                    </div>
+                    
+                    <!-- Foto Kondisi -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1 ml-1">Foto Kondisi (Opsional)</label>
+                        <div class="mt-1 flex justify-center px-6 pt-6 pb-7 border-2 border-slate-200 border-dashed rounded-2xl hover:bg-slate-50 hover:border-secondary/50 transition-colors relative group">
+                            <div class="space-y-1 text-center">
+                                <i data-lucide="camera" class="mx-auto h-8 w-8 text-slate-400 group-hover:text-secondary transition-colors"></i>
+                                <div class="flex text-sm text-slate-600 justify-center mt-2">
+                                    <label for="fotoKondisi" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-secondary focus-within:outline-none hover:text-blue-500">
+                                        <span>Ambil Foto via Kamera</span>
+                                        <input id="fotoKondisi" name="fotoKondisi" type="file" accept="image/*" capture="environment" class="sr-only">
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="fotoPreviewContainer" class="absolute inset-0 bg-white rounded-2xl hidden items-center justify-center p-2 border-2 border-secondary overflow-hidden">
+                                <img id="fotoPreview" class="max-h-full object-contain rounded-xl shadow-sm" src="" alt="Preview">
+                                <button type="button" id="btnHapusFoto" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-colors active:scale-95">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 pb-4">
+                        <button type="submit" 
+                            class="w-full flex items-center justify-center py-4 px-4 border border-transparent rounded-2xl shadow-lg shadow-primary/30 text-sm font-semibold text-white bg-primary hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all active:scale-[0.98]">
+                            <i data-lucide="send" class="w-4 h-4 mr-2"></i>
+                            Kirim Laporan Patroli
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
     </main>
 
     <!-- App Logic -->
