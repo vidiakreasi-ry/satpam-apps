@@ -15,6 +15,7 @@ const pageLogin = document.getElementById('page-login');
 const pageDashboard = document.getElementById('page-dashboard');
 const pagePatroli = document.getElementById('page-patroli'); 
 const pagePatroliForm = document.getElementById('page-patroli-form'); // Halaman Form
+const pageMutasi = document.getElementById('page-mutasi'); // Halaman Mutasi
 
 const loginForm = document.getElementById('loginForm');
 const loginError = document.getElementById('loginError');
@@ -24,6 +25,7 @@ const greetName = document.getElementById('greetName');
 const btnLogOut = document.getElementById('btnLogOut');
 const btnBackFromPatroli = document.getElementById('btnBackFromPatroli');
 const btnBackFromPatroliForm = document.getElementById('btnBackFromPatroliForm');
+const btnBackFromMutasi = document.getElementById('btnBackFromMutasi');
 
 const patroliForm = document.getElementById('patroliForm');
 const patroliLokasi = document.getElementById('patroliLokasi');
@@ -32,8 +34,16 @@ const fotoPreviewContainer = document.getElementById('fotoPreviewContainer');
 const fotoPreview = document.getElementById('fotoPreview');
 const btnHapusFoto = document.getElementById('btnHapusFoto');
 
+const mutasiForm = document.getElementById('mutasiForm');
+const mutasiMenyerahkan = document.getElementById('mutasiMenyerahkan');
+const mutasiFoto = document.getElementById('mutasiFoto');
+const mutasiFotoPreviewContainer = document.getElementById('mutasiFotoPreviewContainer');
+const mutasiFotoPreview = document.getElementById('mutasiFotoPreview');
+const btnHapusFotoMutasi = document.getElementById('btnHapusFotoMutasi');
+
 let html5QrcodeScanner = null; 
-let currentFotoBase64 = ''; // Menyimpan string base64 gambar
+let currentFotoBase64 = ''; // Menyimpan string base64 gambar patroli
+let currentFotoMutasiBase64 = ''; // Menyimpan string base64 gambar mutasi
 
 // ==========================================
 // INITIALIZATION
@@ -47,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 function showPage(pageId) {
     // Sembunyikan semua halaman terlebih dahulu
-    const allPages = [pageLogin, pageDashboard, pagePatroli, pagePatroliForm];
+    const allPages = [pageLogin, pageDashboard, pagePatroli, pagePatroliForm, pageMutasi];
     allPages.forEach(page => {
         if(page) {
             page.classList.remove('page-active');
@@ -62,6 +72,7 @@ function showPage(pageId) {
         else if (pageId === 'login') targetPage = pageLogin;
         else if (pageId === 'patroli') targetPage = pagePatroli;
         else if (pageId === 'patroli-form') targetPage = pagePatroliForm;
+        else if (pageId === 'mutasi') targetPage = pageMutasi;
 
         if(targetPage) {
             targetPage.classList.remove('page-hidden-left', 'page-hidden-right');
@@ -189,8 +200,10 @@ document.querySelectorAll('.menu-card').forEach(card => {
         
         if (title === "Patroli QR") {
             startQRScanner();
+        } else if (title === "Buku Mutasi") {
+            showMutasiForm();
         } else {
-            alert(`Membuka Form: ${title}\n\n(Halaman form bisa Anda tambahkan menggunakan logika SPA yang sama dengan app.js)`);
+            alert(`Fitur ${title} belum diimplementasikan.`);
         }
     });
 });
@@ -258,7 +271,7 @@ function processPatroliScan(lokasiQR) {
     // Reset form ke default
     patroliForm?.reset();
     
-    // Isi field disabled
+    // Isi field lokasi QR setelah form di-reset
     patroliLokasi.value = lokasiQR;
     
     // Reset foto preview
@@ -350,6 +363,114 @@ patroliForm?.addEventListener('submit', async (e) => {
     } catch (error) {
         console.error("Patroli Submit Error:", error);
         alert("Terjadi kesalahan koneksi saat mengirim laporan patroli.");
+    } finally {
+        showLoader(false);
+    }
+});
+
+// ==========================================
+// FORM BUKU MUTASI LOGIC
+// ==========================================
+function showMutasiForm() {
+    mutasiForm?.reset();
+    
+    // Set petugas menyerahkan dari localStorage
+    const namaPetugas = localStorage.getItem('nama_petugas');
+    if (mutasiMenyerahkan) {
+        mutasiMenyerahkan.value = namaPetugas || '';
+    }
+    
+    // Reset foto preview mutasi
+    if (mutasiFoto) mutasiFoto.value = '';
+    currentFotoMutasiBase64 = '';
+    mutasiFotoPreviewContainer?.classList.add('hidden');
+    mutasiFotoPreviewContainer?.classList.remove('flex');
+    
+    showPage('mutasi');
+}
+
+btnBackFromMutasi?.addEventListener('click', () => {
+    showPage('dashboard');
+});
+
+// Image Preview untuk Mutasi
+mutasiFoto?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+            alert("Ukuran foto terlalu besar. Maksimal 5MB.");
+            mutasiFoto.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            currentFotoMutasiBase64 = event.target.result;
+            if (mutasiFotoPreview) mutasiFotoPreview.src = currentFotoMutasiBase64;
+            mutasiFotoPreviewContainer?.classList.remove('hidden');
+            mutasiFotoPreviewContainer?.classList.add('flex');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+btnHapusFotoMutasi?.addEventListener('click', () => {
+    mutasiFoto.value = '';
+    currentFotoMutasiBase64 = '';
+    mutasiFotoPreviewContainer?.classList.add('hidden');
+    mutasiFotoPreviewContainer?.classList.remove('flex');
+});
+
+// Submit Form Buku Mutasi
+mutasiForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const namaPetugas = localStorage.getItem('nama_petugas');
+    if (!namaPetugas) {
+        alert("Sesi Anda telah habis. Silakan login kembali.");
+        showPage('login');
+        return;
+    }
+    
+    const shift = document.getElementById('mutasiShift').value;
+    const menerima = document.getElementById('mutasiMenerima').value.trim();
+    const laporan = document.getElementById('mutasiLaporan').value.trim();
+    
+    // Kumpulkan nilai checkbox inventaris
+    const inventarisNodes = document.querySelectorAll('.inventaris-cb:checked');
+    const inventarisArray = Array.from(inventarisNodes).map(cb => cb.value);
+    const dataInventaris = JSON.stringify(inventarisArray);
+    
+    showLoader(true);
+    
+    try {
+        const response = await fetch(GAS_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify({
+                action: 'mutasi',
+                petugas_menyerahkan: namaPetugas,
+                petugas_menerima: menerima,
+                shift: shift,
+                laporan_mutasi: laporan,
+                data_inventaris: dataInventaris,
+                foto_serah_terima: currentFotoMutasiBase64
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            alert(`Buku Mutasi Tersimpan!\nShift: ${shift}`);
+            showPage('dashboard');
+        } else {
+            alert(`Gagal: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Mutasi Submit Error:", error);
+        alert("Terjadi kesalahan koneksi saat mengirim laporan mutasi.");
     } finally {
         showLoader(false);
     }
