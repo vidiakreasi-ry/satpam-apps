@@ -13,7 +13,8 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbydBbeu68g8CsFACybHrzQv
 // ==========================================
 const pageLogin = document.getElementById('page-login');
 const pageDashboard = document.getElementById('page-dashboard');
-const pagePatroli = document.getElementById('page-patroli'); // Halaman Patroli
+const pagePatroli = document.getElementById('page-patroli'); 
+const pagePatroliForm = document.getElementById('page-patroli-form'); // Halaman Form
 
 const loginForm = document.getElementById('loginForm');
 const loginError = document.getElementById('loginError');
@@ -22,8 +23,17 @@ const loader = document.getElementById('loader');
 const greetName = document.getElementById('greetName');
 const btnLogOut = document.getElementById('btnLogOut');
 const btnBackFromPatroli = document.getElementById('btnBackFromPatroli');
+const btnBackFromPatroliForm = document.getElementById('btnBackFromPatroliForm');
 
-let html5QrcodeScanner = null; // Objek global scanner
+const patroliForm = document.getElementById('patroliForm');
+const patroliLokasi = document.getElementById('patroliLokasi');
+const fotoKondisi = document.getElementById('fotoKondisi');
+const fotoPreviewContainer = document.getElementById('fotoPreviewContainer');
+const fotoPreview = document.getElementById('fotoPreview');
+const btnHapusFoto = document.getElementById('btnHapusFoto');
+
+let html5QrcodeScanner = null; 
+let currentFotoBase64 = ''; // Menyimpan string base64 gambar
 
 // ==========================================
 // INITIALIZATION
@@ -37,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 function showPage(pageId) {
     // Sembunyikan semua halaman terlebih dahulu
-    const allPages = [pageLogin, pageDashboard, pagePatroli];
+    const allPages = [pageLogin, pageDashboard, pagePatroli, pagePatroliForm];
     allPages.forEach(page => {
         if(page) {
             page.classList.remove('page-active');
@@ -51,6 +61,7 @@ function showPage(pageId) {
         if (pageId === 'dashboard') targetPage = pageDashboard;
         else if (pageId === 'login') targetPage = pageLogin;
         else if (pageId === 'patroli') targetPage = pagePatroli;
+        else if (pageId === 'patroli-form') targetPage = pagePatroliForm;
 
         if(targetPage) {
             targetPage.classList.remove('page-hidden-left', 'page-hidden-right');
@@ -238,16 +249,74 @@ btnBackFromPatroli?.addEventListener('click', async () => {
 });
 
 // ==========================================
-// API REQUEST: SEND PATROLI
+// FORM PATROLI LOGIC
 // ==========================================
-async function processPatroliScan(lokasiQR) {
-    const namaPetugas = localStorage.getItem('nama_petugas');
+function processPatroliScan(lokasiQR) {
+    // Isi field disabled
+    patroliLokasi.value = lokasiQR;
     
+    // Reset form ke default
+    patroliForm?.reset();
+    
+    // Reset foto preview
+    fotoKondisi.value = '';
+    currentFotoBase64 = '';
+    fotoPreviewContainer?.classList.add('hidden');
+    fotoPreviewContainer?.classList.remove('flex');
+    
+    // Tampilkan form
+    showPage('patroli-form');
+}
+
+// Kembali ke dashboard dari halaman form
+btnBackFromPatroliForm?.addEventListener('click', () => {
+    showPage('dashboard');
+});
+
+// Image Preview & Konversi ke Base64
+fotoKondisi?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Validasi ukuran opsional (maks 5MB untuk GAS)
+        if (file.size > 5 * 1024 * 1024) {
+            alert("Ukuran foto terlalu besar. Maksimal 5MB.");
+            fotoKondisi.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            currentFotoBase64 = event.target.result;
+            fotoPreview.src = currentFotoBase64;
+            fotoPreviewContainer.classList.remove('hidden');
+            fotoPreviewContainer.classList.add('flex');
+        };
+        reader.readAsDataURL(file); // Convert ke base64 string
+    }
+});
+
+// Hapus Foto Preview
+btnHapusFoto?.addEventListener('click', () => {
+    fotoKondisi.value = '';
+    currentFotoBase64 = '';
+    fotoPreviewContainer.classList.add('hidden');
+    fotoPreviewContainer.classList.remove('flex');
+});
+
+// Submit Form Laporan Patroli
+patroliForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const namaPetugas = localStorage.getItem('nama_petugas');
     if (!namaPetugas) {
         alert("Sesi Anda telah habis. Silakan login kembali.");
         showPage('login');
         return;
     }
+    
+    const lokasiQR = patroliLokasi.value;
+    const kondisi = document.querySelector('input[name="kondisiLokasi"]:checked').value;
+    const laporan = document.getElementById('laporanKondisi').value.trim();
     
     showLoader(true);
     
@@ -258,28 +327,24 @@ async function processPatroliScan(lokasiQR) {
                 action: 'patroli',
                 nama_petugas: namaPetugas,
                 lokasi_qr: lokasiQR,
-                // Kita kirim default Aman karena pada Code.gs Anda sebelumnya
-                // kita menetapkan field kondisi_lokasi sebagai parameter wajib.
-                kondisi_lokasi: 'Aman', 
-                foto_kondisi: '' 
+                kondisi_lokasi: kondisi,
+                laporan_kondisi: laporan,
+                foto_kondisi: currentFotoBase64
             })
         });
         
         const result = await response.json();
         
         if (result.status === 'success') {
-            // Tampilkan Notifikasi Sukses
-            alert(`Patroli Berhasil Dicatat!\nLokasi: ${lokasiQR}`);
+            alert(`Laporan Patroli Tersimpan!\nLokasi: ${lokasiQR}\nKondisi: ${kondisi}`);
             showPage('dashboard');
         } else {
             alert(`Gagal: ${result.message}`);
-            showPage('dashboard');
         }
     } catch (error) {
-        console.error("Patroli Error:", error);
-        alert("Terjadi kesalahan koneksi saat mengirim data patroli.");
-        showPage('dashboard');
+        console.error("Patroli Submit Error:", error);
+        alert("Terjadi kesalahan koneksi saat mengirim laporan patroli.");
     } finally {
         showLoader(false);
     }
-}
+});
