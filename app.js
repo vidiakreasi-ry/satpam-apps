@@ -255,11 +255,11 @@ btnBackFromPatroli?.addEventListener('click', async () => {
 // FORM PATROLI LOGIC
 // ==========================================
 function processPatroliScan(lokasiQR) {
-    // Isi field disabled
-    patroliLokasi.value = lokasiQR;
-    
     // Reset form ke default
     patroliForm?.reset();
+    
+    // Isi field disabled
+    patroliLokasi.value = lokasiQR;
     
     // Reset foto preview
     fotoKondisi.value = '';
