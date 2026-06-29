@@ -1,0 +1,59 @@
+/* 
+ * Custom Styles for Satpam Apps 
+ */
+
+html, body {
+    /* Prevent pull-to-refresh on mobile apps and overscroll bounce */
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Page transitions logic */
+.page-section {
+    will-change: transform, opacity;
+}
+
+/* Classes handled by Javascript to animate pages */
+.page-active {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    z-index: 10 !important;
+    pointer-events: auto;
+}
+
+.page-hidden-left {
+    transform: translateX(-30%) !important;
+    opacity: 0 !important;
+    z-index: -10 !important;
+    pointer-events: none;
+}
+
+.page-hidden-right {
+    transform: translateX(30%) !important;
+    opacity: 0 !important;
+    z-index: -10 !important;
+    pointer-events: none;
+}
+
+/* Fix autofill styles in webkit browsers (Chrome, Safari) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #f8fafc inset !important;
+    -webkit-text-fill-color: #0f172a !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Hide scrollbar for sleek UI */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 20px;
+}

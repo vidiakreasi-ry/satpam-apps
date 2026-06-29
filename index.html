@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal Satpam</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e3a8a',    /* Deep Blue */
+                        secondary: '#3b82f6',  /* Bright Blue */
+                        dark: '#0f172a',       /* Slate 900 */
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- HTML5 QR Code Scanner -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-secondary selection:text-white">
+    
+    <!-- Overlay Loader (Global) -->
+    <div id="loader" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="flex flex-col items-center">
+            <i data-lucide="loader-2" class="w-10 h-10 text-primary animate-spin mb-3"></i>
+            <span class="text-sm font-semibold text-slate-700">Memproses...</span>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER (Mobile Width Constrained) -->
+    <main class="flex-1 w-full max-w-md mx-auto bg-white min-h-screen relative shadow-2xl shadow-slate-200/50 overflow-hidden sm:border-x border-slate-100">
+        
+        <!-- ============================================== -->
+        <!-- HALAMAN: LOG IN                                -->
+        <!-- ============================================== -->
+        <section id="page-login" class="page-section absolute inset-0 p-8 flex flex-col justify-center transition-all duration-500 transform translate-x-0 opacity-100 z-10 bg-white">
+            
+            <!-- App Logo / Icon -->
+            <div class="text-center mb-10">
+                <div class="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+                    <i data-lucide="shield-check" class="w-10 h-10 text-primary"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-dark tracking-tight">Portal Satpam</h1>
+                <p class="text-slate-500 text-sm mt-2">Masuk untuk memulai tugas Anda hari ini.</p>
+            </div>
+
+            <!-- Form Log In -->
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Username</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="user" class="w-5 h-5 text-slate-400 group-focus-within:text-secondary transition-colors"></i>
+                        </div>
+                        <input type="text" id="username" name="username" required autocomplete="username"
+                            class="block w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white placeholder-slate-400 text-sm outline-none" 
+                            placeholder="Masukkan username">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="pin" class="block text-sm font-medium text-slate-700 mb-1.5 ml-1">PIN Rahasia</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="lock" class="w-5 h-5 text-slate-400 group-focus-within:text-secondary transition-colors"></i>
+                        </div>
+                        <input type="password" id="pin" name="pin" required autocomplete="current-password"
+                            class="block w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white placeholder-slate-400 text-sm outline-none" 
+                            placeholder="••••••">
+                    </div>
+                </div>
+
+                <!-- Error Message Container -->
+                <div id="loginError" class="text-red-500 text-sm flex items-start hidden p-3 bg-red-50 rounded-xl border border-red-100">
+                    <i data-lucide="alert-circle" class="w-4 h-4 mr-2 shrink-0 mt-0.5"></i>
+                    <span id="loginErrorText">Error message</span>
+                </div>
+
+                <button type="submit" 
+                    class="w-full flex items-center justify-center py-4 px-4 border border-transparent rounded-2xl shadow-lg shadow-primary/30 text-sm font-semibold text-white bg-primary hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all active:scale-[0.98] group overflow-hidden relative">
+                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                    <span class="relative z-10">Masuk Sekarang</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 ml-2 relative z-10 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </form>
+            
+            <div class="mt-auto pt-8 text-center text-xs font-medium text-slate-400">
+                &copy; 2026 Security Management System
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- HALAMAN: DASHBOARD                             -->
+        <!-- ============================================== -->
+        <section id="page-dashboard" class="page-section absolute inset-0 flex flex-col transition-all duration-500 transform translate-x-full opacity-0 -z-10 bg-slate-50">
+            
+            <!-- Dashboard Header -->
+            <div class="bg-primary px-6 pt-12 pb-8 rounded-b-[2rem] shadow-xl relative overflow-hidden shrink-0">
+                <!-- Ornaments -->
+                <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-secondary/40 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
+                
+                <div class="relative z-10 flex justify-between items-center">
+                    <div>
+                        <p class="text-blue-100/80 text-sm font-medium mb-1 tracking-wide">Selamat bertugas,</p>
+                        <h2 id="greetName" class="text-white text-2xl font-bold tracking-tight line-clamp-1">Petugas</h2>
+                    </div>
+                    <button id="btnLogOut" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-white backdrop-blur-md active:scale-95 border border-white/5" title="Log Out">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="flex-1 p-6 overflow-y-auto pb-10">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 ml-1">Menu Utama</h3>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    
+                    <!-- Tombol: Patroli QR -->
+                    <button class="menu-card bg-white p-5 rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-100 flex items-center group transition-all hover:shadow-md hover:border-secondary/30 text-left w-full active:scale-[0.98]">
+                        <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="qr-code" class="w-7 h-7 text-secondary group-hover:text-white transition-colors"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-slate-800 font-bold text-base mb-0.5">Patroli QR</h4>
+                            <p class="text-slate-500 text-xs">Scan & lapor kondisi lokasi</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-secondary group-hover:translate-x-0.5 transition-all"></i>
+                        </div>
+                    </button>
+
+                    <!-- Tombol: Buku Mutasi -->
+                    <button class="menu-card bg-white p-5 rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-100 flex items-center group transition-all hover:shadow-md hover:border-emerald-500/30 text-left w-full active:scale-[0.98]">
+                        <div class="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center mr-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="book-open-check" class="w-7 h-7 text-emerald-500 group-hover:text-white transition-colors"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-slate-800 font-bold text-base mb-0.5">Buku Mutasi</h4>
+                            <p class="text-slate-500 text-xs">Serah terima & inventaris</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-emerald-50 transition-colors">
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-all"></i>
+                        </div>
+                    </button>
+                    
+                </div>
+                
+                <!-- Info Section -->
+                <div class="mt-8 bg-blue-50/50 rounded-2xl p-5 border border-blue-100">
+                    <div class="flex items-start">
+                        <div class="p-1.5 bg-blue-100 rounded-lg mr-3 mt-0.5">
+                            <i data-lucide="info" class="w-4 h-4 text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h5 class="text-sm font-semibold text-blue-900 mb-1">Informasi</h5>
+                            <p class="text-xs text-blue-700/80 leading-relaxed">
+                                Fitur form detail untuk "Patroli QR" dan "Buku Mutasi" belum dikembangkan di halaman ini, namun backend Anda sudah siap menerima request.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- HALAMAN: PATROLI QR                            -->
+        <!-- ============================================== -->
+        <section id="page-patroli" class="page-section absolute inset-0 flex flex-col transition-all duration-500 transform translate-x-full opacity-0 -z-10 bg-slate-900">
+            <!-- Header for Scanner -->
+            <div class="px-4 py-4 flex items-center justify-between bg-slate-900/80 backdrop-blur-md text-white shrink-0 z-20 absolute top-0 left-0 right-0">
+                <button id="btnBackFromPatroli" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all active:scale-95">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <h2 class="text-lg font-semibold tracking-wide">Scan Titik Patroli</h2>
+                <div class="w-9"></div> <!-- Spacer -->
+            </div>
+            
+            <div class="flex-1 flex flex-col items-center justify-center relative bg-black">
+                <!-- Wrapper for QR Reader -->
+                <div class="w-full max-w-sm rounded-3xl overflow-hidden relative shadow-2xl z-10">
+                    <div id="qr-reader" class="w-full bg-black"></div>
+                </div>
+                
+                <div class="absolute bottom-10 left-0 right-0 text-center z-20 px-6">
+                    <div class="inline-block bg-slate-800/80 backdrop-blur-md px-6 py-3 rounded-2xl border border-slate-700 shadow-xl">
+                        <p class="text-slate-300 text-sm">
+                            Arahkan kamera ke QR Code lokasi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+    <script>
+        // Render Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
