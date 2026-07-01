@@ -265,13 +265,13 @@
                             class="block w-full p-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white hover:bg-slate-50 focus:bg-white placeholder-slate-400 text-sm outline-none resize-none"></textarea>
                     </div>
 
-                    <!-- Laporan Pengendalian Energi-->
+                    <!-- Laporan Pengendalian Energi -->
                     <div>
-                        <label for="laporanPengendalianEnergi" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan Pengendalian Energi</label>
-                        <textarea id="laporanPengendalianEnergi" name="laporanPengendalianEnergi" rows="3" placeholder="Tuliskan Penjelasan Pengendalian Energi"
+                        <label for="laporanEnergi" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan Pengendalian Energi</label>
+                        <textarea id="laporanEnergi" name="laporanEnergi" rows="2" placeholder="Isi laporan pengendalian energi (misal: AC/Lampu dimatikan)"
                             class="block w-full p-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white hover:bg-slate-50 focus:bg-white placeholder-slate-400 text-sm outline-none resize-none"></textarea>
                     </div>
-
+                    
                     <!-- Foto Kondisi -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1 ml-1">Foto Kondisi (Opsional)</label>
@@ -349,8 +349,13 @@
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <i data-lucide="user-plus" class="w-5 h-5 text-slate-400"></i>
                             </div>
-                            <input type="text" id="mutasiMenerima" required placeholder="Nama petugas penerima"
-                                class="block w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white text-sm outline-none">
+                            <select id="mutasiMenerima" required
+                                class="block w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white text-sm outline-none appearance-none">
+                                <option value="" disabled selected>-- Memuat Daftar Petugas --</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+                            </div>
                         </div>
                     </div>
 
