@@ -258,13 +258,20 @@
                         </div>
                     </div>
 
-                    <!-- Laporan Kondisi -->
+                    <!-- Laporan Kondisi Patroli-->
                     <div>
-                        <label for="laporanKondisi" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan / Keterangan</label>
-                        <textarea id="laporanKondisi" name="laporanKondisi" rows="3" placeholder="Tuliskan keterangan rinci"
+                        <label for="laporanKondisiPatroli" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan Kondisi Patroli</label>
+                        <textarea id="laporanKondisiPatroli" name="laporanKondisiPatroli" rows="3" placeholder="Tuliskan Kondisi Patroli"
                             class="block w-full p-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white hover:bg-slate-50 focus:bg-white placeholder-slate-400 text-sm outline-none resize-none"></textarea>
                     </div>
-                    
+
+                    <!-- Laporan Pengendalian Energi-->
+                    <div>
+                        <label for="laporanPengendalianEnergi" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan Pengendalian Energi</label>
+                        <textarea id="laporanPengendalianEnergi" name="laporanPengendalianEnergi" rows="3" placeholder="Tuliskan Penjelasan Pengendalian Energi"
+                            class="block w-full p-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white hover:bg-slate-50 focus:bg-white placeholder-slate-400 text-sm outline-none resize-none"></textarea>
+                    </div>
+
                     <!-- Foto Kondisi -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1 ml-1">Foto Kondisi (Opsional)</label>
@@ -318,8 +325,8 @@
                         <select id="mutasiShift" required
                             class="block w-full px-4 py-3.5 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white text-sm outline-none appearance-none">
                             <option value="" disabled selected>-- Pilih Shift --</option>
-                            <option value="Pagi">Pagi (08:00 - 20:00)</option>
-                            <option value="Malam">Malam (20:00 - 08:00)</option>
+                            <option value="Pagi">Pagi (07:00 - 19:00)</option>
+                            <option value="Malam">Malam (19:00 - 07:00)</option>
                         </select>
                     </div>
 
