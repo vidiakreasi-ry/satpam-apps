@@ -6,7 +6,7 @@
 // CONFIGURATION
 // ==========================================
 // TODO: Ganti URL di bawah dengan Web App URL dari deployment Google Apps Script Anda!
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbydBbeu68g8CsFACybHrzQv750fG-AqiYOTsvR0XxYGpwkCcrNuxtlR3o6K1qI24tNi/exec'; 
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyl2nsP0oj3-edKeiE_hUANwzC5ETjxFLELCnVe-85ucR5zDQVD-s8f9UIcBxjkoKXX/exec'; 
 
 // ==========================================
 // DOM ELEMENTS
