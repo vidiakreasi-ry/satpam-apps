@@ -323,18 +323,26 @@ btnHapusFoto?.addEventListener('click', () => {
 patroliForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const namaPetugas = localStorage.getItem('nama_petugas');
-    if (!namaPetugas) {
-        alert("Sesi Anda telah habis. Silakan login kembali.");
-        showPage('login');
-        return;
-    }
-    
-    const lokasiQR = patroliLokasi.value;
-    const kondisi = document.querySelector('input[name="kondisiLokasi"]:checked').value;
-    const laporan = document.getElementById('laporanKondisi').value.trim
-    const laporanEnergi = document.getElementById('laporanEnergi').value.trim();
-    
+    try {
+        const namaPetugas = localStorage.getItem('nama_petugas');
+        if (!namaPetugas) {
+            alert("Sesi Anda telah habis. Silakan login kembali.");
+            showPage('login');
+            return;
+        }
+
+        const patroliLokasiEl = document.getElementById('patroliLokasi');
+        const lokasiQR = patroliLokasiEl ? patroliLokasiEl.value : '';
+        
+        const kondisiEl = document.querySelector('input[name="kondisiLokasi"]:checked');
+        const kondisi = kondisiEl ? kondisiEl.value : 'Aman';
+        
+        const laporanKondisiEl = document.getElementById('laporanKondisi');
+        const laporan = laporanKondisiEl ? laporanKondisiEl.value.trim() : '';
+        
+        const laporanEnergiEl = document.getElementById('laporanEnergi');
+        const laporanEnergi = laporanEnergiEl ? laporanEnergiEl.value.trim() : '';
+
     showLoader(true);
     
     try {
@@ -367,6 +375,11 @@ patroliForm?.addEventListener('submit', async (e) => {
         alert("Terjadi kesalahan koneksi saat mengirim laporan patroli.");
     } finally {
         showLoader(false);
+    }
+    } catch (e) {
+        showLoader(false);
+        console.error("Internal App Error:", e);
+        alert("Terjadi kesalahan sistem (Internal Error). Silakan coba lagi.");
     }
 });
 
@@ -465,16 +478,22 @@ btnHapusFotoMutasi?.addEventListener('click', () => {
 mutasiForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const namaPetugas = localStorage.getItem('nama_petugas');
-    if (!namaPetugas) {
-        alert("Sesi Anda telah habis. Silakan login kembali.");
-        showPage('login');
-        return;
-    }
+    try {
+        const namaPetugas = localStorage.getItem('nama_petugas');
+        if (!namaPetugas) {
+            alert("Sesi Anda telah habis. Silakan login kembali.");
+            showPage('login');
+            return;
+        }
     
-    const shift = document.getElementById('mutasiShift').value;
-    const menerima = document.getElementById('mutasiMenerima').value.trim();
-    const laporan = document.getElementById('mutasiLaporan').value.trim();
+        const shiftEl = document.getElementById('mutasiShift');
+        const shift = shiftEl ? shiftEl.value : '';
+        
+        const menerimaEl = document.getElementById('mutasiMenerima');
+        const menerima = menerimaEl ? menerimaEl.value.trim() : '';
+        
+        const laporanEl = document.getElementById('mutasiLaporan');
+        const laporan = laporanEl ? laporanEl.value.trim() : '';
     
     // Kumpulkan nilai checkbox inventaris
     const inventarisNodes = document.querySelectorAll('.inventaris-cb:checked');
@@ -513,5 +532,10 @@ mutasiForm?.addEventListener('submit', async (e) => {
         alert("Terjadi kesalahan koneksi saat mengirim laporan mutasi.");
     } finally {
         showLoader(false);
+    }
+    } catch (e) {
+        showLoader(false);
+        console.error("Internal App Error:", e);
+        alert("Terjadi kesalahan sistem (Internal Error). Silakan coba lagi.");
     }
 });
