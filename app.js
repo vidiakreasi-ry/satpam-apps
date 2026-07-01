@@ -6,7 +6,7 @@
 // CONFIGURATION
 // ==========================================
 // TODO: Ganti URL di bawah dengan Web App URL dari deployment Google Apps Script Anda!
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyl2nsP0oj3-edKeiE_hUANwzC5ETjxFLELCnVe-85ucR5zDQVD-s8f9UIcBxjkoKXX/exec'; 
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbydBbeu68g8CsFACybHrzQv750fG-AqiYOTsvR0XxYGpwkCcrNuxtlR3o6K1qI24tNi/exec'; 
 
 // ==========================================
 // DOM ELEMENTS
@@ -330,7 +330,7 @@ patroliForm?.addEventListener('submit', async (e) => {
             showPage('login');
             return;
         }
-
+        
         const patroliLokasiEl = document.getElementById('patroliLokasi');
         const lokasiQR = patroliLokasiEl ? patroliLokasiEl.value : '';
         
@@ -342,10 +342,13 @@ patroliForm?.addEventListener('submit', async (e) => {
         
         const laporanEnergiEl = document.getElementById('laporanEnergi');
         const laporanEnergi = laporanEnergiEl ? laporanEnergiEl.value.trim() : '';
-
-    showLoader(true);
-    
-    try {
+        
+        const btnSubmit = e.target.querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.disabled = true;
+        
+        showLoader(true);
+        
+        try {
         const response = await fetch(GAS_URL, {
             method: 'POST',
             headers: {
@@ -375,9 +378,13 @@ patroliForm?.addEventListener('submit', async (e) => {
         alert("Terjadi kesalahan koneksi saat mengirim laporan patroli.");
     } finally {
         showLoader(false);
+        const btnSubmit = e.target.querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.disabled = false;
     }
     } catch (e) {
         showLoader(false);
+        const btnSubmit = e.target.querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.disabled = false;
         console.error("Internal App Error:", e);
         alert("Terjadi kesalahan sistem (Internal Error). Silakan coba lagi.");
     }
@@ -485,7 +492,7 @@ mutasiForm?.addEventListener('submit', async (e) => {
             showPage('login');
             return;
         }
-    
+        
         const shiftEl = document.getElementById('mutasiShift');
         const shift = shiftEl ? shiftEl.value : '';
         
@@ -494,15 +501,18 @@ mutasiForm?.addEventListener('submit', async (e) => {
         
         const laporanEl = document.getElementById('mutasiLaporan');
         const laporan = laporanEl ? laporanEl.value.trim() : '';
-    
-    // Kumpulkan nilai checkbox inventaris
-    const inventarisNodes = document.querySelectorAll('.inventaris-cb:checked');
-    const inventarisArray = Array.from(inventarisNodes).map(cb => cb.value);
-    const dataInventaris = JSON.stringify(inventarisArray);
-    
-    showLoader(true);
-    
-    try {
+        
+        // Kumpulkan nilai checkbox inventaris
+        const inventarisNodes = document.querySelectorAll('.inventaris-cb:checked');
+        const inventarisArray = Array.from(inventarisNodes).map(cb => cb.value);
+        const dataInventaris = JSON.stringify(inventarisArray);
+        
+        const btnSubmit = e.target.querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.disabled = true;
+        
+        showLoader(true);
+        
+        try {
         const response = await fetch(GAS_URL, {
             method: 'POST',
             headers: {
@@ -532,9 +542,13 @@ mutasiForm?.addEventListener('submit', async (e) => {
         alert("Terjadi kesalahan koneksi saat mengirim laporan mutasi.");
     } finally {
         showLoader(false);
+        const btnSubmit = e.target.querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.disabled = false;
     }
     } catch (e) {
         showLoader(false);
+        const btnSubmit = e.target.querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.disabled = false;
         console.error("Internal App Error:", e);
         alert("Terjadi kesalahan sistem (Internal Error). Silakan coba lagi.");
     }
