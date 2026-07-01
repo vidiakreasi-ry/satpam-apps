@@ -332,7 +332,8 @@ patroliForm?.addEventListener('submit', async (e) => {
     
     const lokasiQR = patroliLokasi.value;
     const kondisi = document.querySelector('input[name="kondisiLokasi"]:checked').value;
-    const laporan = document.getElementById('laporanKondisi').value.trim();
+    const laporan = document.getElementById('laporanKondisi').value.trim
+    const laporanEnergi = document.getElementById('laporanEnergi').value.trim();
     
     showLoader(true);
     
@@ -348,6 +349,7 @@ patroliForm?.addEventListener('submit', async (e) => {
                 lokasi_qr: lokasiQR,
                 kondisi_lokasi: kondisi,
                 laporan_kondisi: laporan,
+                laporan_energi: laporanEnergi,
                 foto_kondisi: currentFotoBase64 // Ini yang tadi terlalu besar jika pakai URLSearchParams
             })
         });
@@ -386,7 +388,45 @@ function showMutasiForm() {
     mutasiFotoPreviewContainer?.classList.add('hidden');
     mutasiFotoPreviewContainer?.classList.remove('flex');
     
+    // Memuat daftar petugas
+    loadPetugasList();
+
     showPage('mutasi');
+}
+
+async function loadPetugasList() {
+    const selectMenerima = document.getElementById('mutasiMenerima');
+    
+    if (selectMenerima.options.length <= 1) {
+        try {
+            selectMenerima.innerHTML = '<option value="" disabled selected>-- Memuat Daftar Petugas --</option>';
+            const response = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify({ action: 'get_petugas' })
+            });
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                selectMenerima.innerHTML = '<option value="" disabled selected>-- Pilih Petugas Menerima --</option>';
+                result.data.forEach(nama => {
+                    const option = document.createElement('option');
+                    option.value = nama;
+                    option.textContent = nama;
+                    selectMenerima.appendChild(option);
+                });
+            } else {
+                selectMenerima.innerHTML = '<option value="" disabled selected>-- Gagal memuat data --</option>';
+            }
+        } catch (error) {
+            console.error("Gagal load petugas:", error);
+            selectMenerima.innerHTML = '<option value="" disabled selected>-- Gagal memuat data --</option>';
+        }
+    } else {
+        selectMenerima.selectedIndex = 0;
+    }
 }
 
 btnBackFromMutasi?.addEventListener('click', () => {
