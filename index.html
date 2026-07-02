@@ -62,7 +62,7 @@
                     <i data-lucide="shield-check" class="w-10 h-10 text-primary"></i>
                 </div>
                 <h1 class="text-3xl font-bold text-dark tracking-tight">Portal Satpam</h1>
-                <p class="text-slate-500 text-sm mt-2">Setditjen PAUD, Dikdas dan PNFI</p>
+                <p class="text-slate-500 text-sm mt-2">Masuk untuk memulai tugas Anda hari ini.</p>
             </div>
 
             <!-- Form Log In -->
@@ -106,7 +106,7 @@
             </form>
             
             <div class="mt-auto pt-8 text-center text-xs font-medium text-slate-400">
-                &copy; 2026 ViDia Kreasi - Security Management System
+                &copy; 2026 Security Management System
             </div>
         </section>
 
@@ -177,7 +177,7 @@
                         <div>
                             <h5 class="text-sm font-semibold text-blue-900 mb-1">Informasi</h5>
                             <p class="text-xs text-blue-700/80 leading-relaxed">
-                                Selamat datang di Portal Satuan Pengamanan, Portal ini digunakan sebagai alat bantu untuk melaksanakan Patroli dan Serah Terima Jaga di Lingkungan Setditjen PAUD, Dikdas dan PNFI.
+                                Fitur form detail untuk "Patroli QR" dan "Buku Mutasi" belum dikembangkan di halaman ini, namun backend Anda sudah siap menerima request.
                             </p>
                         </div>
                     </div>
@@ -258,10 +258,10 @@
                         </div>
                     </div>
 
-                    <!-- Laporan Kondisi Patroli-->
+                    <!-- Laporan Kondisi -->
                     <div>
-                        <label for="laporanKondisiPatroli" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan Kondisi Patroli</label>
-                        <textarea id="laporanKondisiPatroli" name="laporanKondisiPatroli" rows="3" placeholder="Tuliskan Kondisi Patroli"
+                        <label for="laporanKondisi" class="block text-sm font-medium text-slate-700 mb-1 ml-1">Laporan / Keterangan</label>
+                        <textarea id="laporanKondisi" name="laporanKondisi" rows="3" placeholder="Tuliskan keterangan rinci"
                             class="block w-full p-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white hover:bg-slate-50 focus:bg-white placeholder-slate-400 text-sm outline-none resize-none"></textarea>
                     </div>
 
@@ -325,8 +325,8 @@
                         <select id="mutasiShift" required
                             class="block w-full px-4 py-3.5 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all bg-white text-sm outline-none appearance-none">
                             <option value="" disabled selected>-- Pilih Shift --</option>
-                            <option value="Pagi">Pagi (07:00 - 19:00)</option>
-                            <option value="Malam">Malam (19:00 - 07:00)</option>
+                            <option value="Pagi">Pagi (08:00 - 20:00)</option>
+                            <option value="Malam">Malam (20:00 - 08:00)</option>
                         </select>
                     </div>
 
